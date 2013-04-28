@@ -10,22 +10,10 @@ int main(int argc, char* argv[])
 {
 	if (!argv[1])
 		return -1;
-	Classifier classifier(argv[1]);
-	classifier.showImage();
-	classifier.setBins(32);
-	classifier.getHist();
-	classifier.showHist();
-	Status status = classifier.classify();
-	switch (status) {
-	case GOOD:
-		cout << "good" << endl;
-		break;
-	case BAD:
-		cout << "bad" << endl;
-		break;
-	default:
-		cout << "unknown" << endl;
-		break;
-	}
+	Feature* feature = new ColorFeature();
+	Mat image = imread(argv[1]);
+	feature->getFeature(image);
+	feature->showFeature();
+	delete feature;
 	return 0;
 }

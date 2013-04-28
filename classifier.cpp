@@ -3,37 +3,7 @@
 using namespace cv;
 using namespace std;
 
-Classifier::Classifier(char* name)
-{
-	bins = 16;
-	image = imread(name);
-}
-
-Status Classifier::classify()
-{
-	// TODO: needs more implementation
-	return BAD;
-}
-
-void Classifier::loadImage(char* name)
-{
-	image = imread(name);
-}
-
-void Classifier::showImage()
-{
-	namedWindow("test");
-	imshow("test", image);
-	waitKey(0);
-}
-
-// default is 16
-void Classifier::setBins(int b)
-{
-	bins = b;
-}
-
-void Classifier::getHistHelper(int channel)
+void ColorFeature::getHistHelper(const Mat& image, int channel)
 {
 	MatND histM;
 	int histSize[1];
@@ -49,42 +19,68 @@ void Classifier::getHistHelper(int channel)
 
 	calcHist(&image, 1, channels, Mat(), histM, 1, histSize, ranges);
 	for (int i = 0; i < bins; i++)
-		hist.push_back(static_cast<int>(histM.at<float>(i)));
+		feat.push_back(static_cast<int>(histM.at<float>(i)));
 }
 
-// This function get histogram for R, G, B channel separately and concatenate
-// them together to "hist"
-void Classifier::getHist()
+void ColorFeature::getFeature(const Mat& image)
 {
-	hist.clear();
+	feat.clear();
 	for (int i = 0; i < 3; i++)
-		getHistHelper(i);
+		getHistHelper(image, i);
 }
 
-void Classifier::showHist()
+void Feature::showFeature() const
 {
 	int height = 600;
 	int width = 800;
 	double maxVal = 0;
 	int hpt = static_cast<int>(0.9 * height);
-	int size = hist.size();
+	int size = feat.size();
 	int span = width / size;
 
 	for (int i = 0; i < size; i++)
-		if (hist[i] > maxVal)
-			maxVal = hist[i];
-	Mat histImage(height, width, CV_8U, Scalar(255));
+		if (feat[i] > maxVal)
+			maxVal = feat[i];
+	Mat featImage(height, width, CV_8U, Scalar(255));
 	for (int i = 0; i < size; i++) {
-		float binVal = hist[i];
+		float binVal = feat[i];
 		int intensity = static_cast<int>(binVal * hpt / maxVal);
 		for (int j = 0; j < span - 1; j++) {
-			line(histImage, Point(i * span + j, height),
+			line(featImage, Point(i * span + j, height),
 					Point(i * span + j, height - intensity),
 					Scalar::all(0));
 		}
 	}
 
-	namedWindow("hist");
-	imshow("hist", histImage);
+	namedWindow("feat");
+	imshow("feat", featImage);
+	waitKey(0);
+}
+
+void Feature::setBins(int b)
+{
+	bins = b;
+}
+
+Classifier::Classifier(const char* name)
+{
+	image = imread(name);
+}
+
+Status Classifier::classify()
+{
+	// TODO: needs more implementation
+	return BAD;
+}
+
+void Classifier::loadImage(const char* name)
+{
+	image = imread(name);
+}
+
+void Classifier::showImage() const
+{
+	namedWindow("test");
+	imshow("test", image);
 	waitKey(0);
 }
