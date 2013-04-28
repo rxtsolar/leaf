@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include "svm.h"
 #include "classifier.h"
+#include "feature.h"
 
 using namespace std;
 using namespace cv;

@@ -3,7 +3,7 @@ FLAG := $(shell pkg-config opencv --cflags)
 FLAG +=
 
 OUT := leaf
-SRC := main.cpp svm.cpp classifier.cpp
+SRC := main.cpp svm.cpp classifier.cpp feature.cpp
 
 all:
 	g++ $(FLAG) $(SRC) -o $(OUT) $(LIBS)
