@@ -1,6 +1,6 @@
 LIBS := $(shell pkg-config opencv --libs)
 FLAG := $(shell pkg-config opencv --cflags)
-FLAG += -g
+FLAG +=
 
 OUT := leaf
 SRC := main.cpp svm.cpp classifier.cpp
