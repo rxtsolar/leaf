@@ -3,20 +3,22 @@
 
 class Feature {
 public:
-	Feature() : bins(16) {}
 	virtual ~Feature() {}
 	virtual void getFeature(const cv::Mat& image) = 0;
 	virtual void showFeature() const;
+	virtual void printFeature() const;
 	void setBins(int b);
 protected:
-	int bins;
 	std::vector<int> feat;
 };
 
 class ColorFeature : public Feature {
 public:
+	ColorFeature() : bins(16) {}
 	~ColorFeature() {}
 	void getFeature(const cv::Mat& image);
+	void setBins(int b);
 private:
+	int bins;
 	void getHistHelper(const cv::Mat& image, int channel);
 };

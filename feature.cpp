@@ -1,34 +1,10 @@
+#include <iostream>
 #include "feature.h"
 
 using namespace cv;
 using namespace std;
 
-void ColorFeature::getHistHelper(const Mat& image, int channel)
-{
-	MatND histM;
-	int histSize[1];
-	float hranges[2];
-	const float* ranges[1];
-	int channels[1];
-
-	histSize[0] = bins;
-	hranges[0] = 0.0;
-	hranges[1] = 255.0;
-	ranges[0] = hranges;
-	channels[0] = channel;
-
-	calcHist(&image, 1, channels, Mat(), histM, 1, histSize, ranges);
-	for (int i = 0; i < bins; i++)
-		feat.push_back(static_cast<int>(histM.at<float>(i)));
-}
-
-void ColorFeature::getFeature(const Mat& image)
-{
-	feat.clear();
-	for (int i = 0; i < 3; i++)
-		getHistHelper(image, i);
-}
-
+/* virtual class Feature */
 void Feature::showFeature() const
 {
 	int height = 600;
@@ -57,7 +33,43 @@ void Feature::showFeature() const
 	waitKey(0);
 }
 
-void Feature::setBins(int b)
+void Feature::printFeature() const
+{
+	int size = feat.size();
+	cout << size;
+	for (int i = 0; i < size; i++)
+		cout << ' ' << feat[i];
+	cout << endl;
+}
+
+/* feature class implementation */
+void ColorFeature::getHistHelper(const Mat& image, int channel)
+{
+	MatND histM;
+	int histSize[1];
+	float hranges[2];
+	const float* ranges[1];
+	int channels[1];
+
+	histSize[0] = bins;
+	hranges[0] = 0.0;
+	hranges[1] = 255.0;
+	ranges[0] = hranges;
+	channels[0] = channel;
+
+	calcHist(&image, 1, channels, Mat(), histM, 1, histSize, ranges);
+	for (int i = 0; i < bins; i++)
+		feat.push_back(static_cast<int>(histM.at<float>(i)));
+}
+
+void ColorFeature::getFeature(const Mat& image)
+{
+	feat.clear();
+	for (int i = 0; i < 3; i++)
+		getHistHelper(image, i);
+}
+
+void ColorFeature::setBins(int b)
 {
 	bins = b;
 }

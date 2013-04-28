@@ -11,10 +11,10 @@ int main(int argc, char* argv[])
 {
 	if (!argv[1])
 		return -1;
-	Feature* feature = new ColorFeature();
+	ColorFeature feature;
 	Mat image = imread(argv[1]);
-	feature->getFeature(image);
-	feature->showFeature();
-	delete feature;
+	feature.getFeature(image);
+	feature.showFeature();
+	feature.printFeature();
 	return 0;
 }
