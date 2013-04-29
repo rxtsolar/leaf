@@ -1,3 +1,6 @@
+#ifndef __CLASSIFIER_H__
+#define __CLASSIFIER_H__
+
 #include <opencv2/opencv.hpp>
 #include <vector>
 
@@ -14,3 +17,6 @@ public:
 private:
 	cv::Mat image;
 };
+
+
+#endif /* __CLASSIFIER_H__ */

@@ -1,3 +1,6 @@
+#ifndef __FEATURE_H__
+#define __FEATURE_H__
+
 #include <opencv2/opencv.hpp>
 #include <vector>
 
@@ -22,3 +25,6 @@ private:
 	int bins;
 	void getHistHelper(const cv::Mat& image, int channel);
 };
+
+
+#endif /* __FEATURE_H__ */
