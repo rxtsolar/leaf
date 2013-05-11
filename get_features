@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# This script is for extracting same feature from a batch of images for
+# training purpose.
+# Given the positive samples and negative samples directory and feature
+# name, this script will run ./extract on each image to get the feature.
+# The output is stdout, so we can pipe it into a file.
+#
+# Output:
+# <pos_nr> <neg_nr>
+# <feature_nr> <feature_1> <feature_2> ... <feature_n>
+#
+# WARNING: both directories of pos and neg must contain image file only!
+#
+
+echoerr()
+{
+	echo "$@" 1>&2;
+}
+
+usage()
+{
+	echoerr "usage: ./get_features <postive_dir> <negative_dir> <feature_name>";
+	echoerr "	[feature_name]	[feature]";
+	echoerr "	color		color histogram";
+}
+
+check()
+{
+	if [ ! -d $1 ]; then
+		usage;
+		exit -1;
+	fi
+
+	if [ ! -d $2 ]; then
+		usage;
+		exit -1;
+	fi
+
+	case $3 in
+	"color")
+		;;
+	*)
+		usage;
+		exit -1;
+		;;
+	esac
+}
+
+
+# main script
+
+check "$@";
+
+pos_nr=$(ls "$1" | wc -l);
+neg_nr=$(ls "$2" | wc -l);
+
+echo "$pos_nr $neg_nr";
+for image in $(ls "$1"); do
+	./extract "$1/$image" "$3";
+done
+for image in $(ls "$2"); do
+	./extract "$2/$image" "$3";
+done
